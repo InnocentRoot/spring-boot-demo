@@ -1,0 +1,18 @@
+name: Master branch build
+
+on: ['push', 'pull_request']
+
+jobs:
+  test:
+    name: Run Unit & Integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup java
+      - uses: actions/setup-java@v2
+        with:
+          java-version: 13
+      - name: Maven package
+        run: mvn clean package -DskipTests
+      - name: Maven verify
+        run: mvn clean verify
