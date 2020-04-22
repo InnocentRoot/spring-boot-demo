@@ -6,6 +6,7 @@ import com.root.demo.repository.UserRepository;
 import com.root.demo.request.user.FindByEmailRequest;
 import com.root.demo.request.user.SignUpRequest;
 import com.root.demo.response.ApiResponse;
+import com.root.demo.response.UserResponse;
 import com.root.demo.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,16 +33,10 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    private BCryptPasswordEncoder passwordEncoder;
-
     @Autowired
-    public UserController(UserService userService, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-
-        Logger l = LoggerFactory.getLogger(UserController.class);
-        l.info("UserController called !");
     }
 
     @GetMapping("/all")
@@ -93,14 +88,14 @@ public class UserController {
         User user = (new User())
                 .setFirstName(signUpRequest.getFirstName())
                .setLastName(signUpRequest.getLastName())
-               .setPassword(passwordEncoder.encode(signUpRequest.getPassword()))
+               .setPassword(signUpRequest.getPassword())
                .setEmail(signUpRequest.getEmail())
                .setUserName(signUpRequest.getUserName());
 
-       this.userRepository.save(user);
+       user = this.userService.registerUser(user);
 
         return new ResponseEntity<>(
-                new ApiResponse(true, "User registered successfully !"),
+                new UserResponse("User registered successfully !", user),
                 HttpStatus.CREATED
         );
     }

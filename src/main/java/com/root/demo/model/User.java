@@ -21,6 +21,7 @@ public class User extends TimeStampModel {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
+    @Setter
     private Integer id;
 
     @Getter
@@ -33,7 +34,7 @@ public class User extends TimeStampModel {
 
     @Getter
     @Setter
-    @Column(name = "password", length = 255)
+    @Column(name = "password")
     @NonNull
     @Length(max = 255)
     private String password;

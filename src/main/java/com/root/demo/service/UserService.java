@@ -47,12 +47,12 @@ public class UserService {
     public boolean changePassword(User user, String oldPassword, String newPassword) {
         User u = findUserByEmail(user.getEmail());
 
-//        if(u != null && passwordEncoder.matches(oldPassword, u.getPassword())) {
-//            u.setPassword(passwordEncoder.encode(newPassword));
-//
-//            return true;
-//        }
-
         return false;
+    }
+
+    public User registerUser(User u) {
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+
+        return this.userRepository.save(u);
     }
 }
